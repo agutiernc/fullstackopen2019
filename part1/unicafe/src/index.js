@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 
-
 const Button = ({onClick, text}) => (
     <button onClick={onClick}>{text}</button>
 )
@@ -11,18 +10,14 @@ const App = (props) => {
     const [good, setGood] = useState(0)
     const [neutral, setNuetral] = useState(0)
     const [bad, setBad] = useState(0)
+    
+    const handleGoodClick = () => setGood(good + 1)
+    const handleNuetralClick = () => setNuetral(neutral + 1)
+    const handleBadClick = () => setBad(bad + 1)
 
-    const handleGoodClick = () => {
-       setGood(good + 1)
-    }
-
-    const handleNuetralClick = () => {
-        setNuetral(neutral + 1)
-    }
-
-    const handleBadClick = () => {
-        setBad(bad + 1)
-    }
+    const total = good + neutral + bad
+    const positive = good / total * 100 || 0
+    const average = ( (good * 1) - bad ) / total || 0
 
     return (
         <div>
@@ -38,6 +33,9 @@ const App = (props) => {
                 <p>Good: {good}</p>
                 <p>Neutral: {neutral}</p>
                 <p>Bad: {bad}</p>
+                <p>All: {total}</p>
+                <p>Average: {average}</p>
+                <p>Positive: {positive}%</p>
             </div>
         </div>
     )

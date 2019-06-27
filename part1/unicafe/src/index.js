@@ -3,8 +3,16 @@ import ReactDOM from 'react-dom';
 
 const Statistics = (props) => {
     const total = props.good + props.neutral + props.bad
-    const positive = props.good / total * 100 || 0
+    const positive = (props.good / total) * 100 || 0
     const average = ( (props.good * 1) - props.bad ) / total || 0
+
+    if(props.good === 0 && props.neutral === 0 && props.bad === 0){
+        return (
+            <div>
+                <p>No feedback given</p>
+            </div>
+        )
+    }
 
     return (
         <div>

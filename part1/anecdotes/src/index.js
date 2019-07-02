@@ -1,5 +1,28 @@
+// FullStack Open 2019 - Alfonso Gutierrez
+// Part 1 - Anecdotes
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
+
+const Voted = ({votes, anecdotes}) => {
+   const maxVotes = Math.max(...votes)
+   const maxVotesIndex = votes.indexOf(maxVotes)
+    
+   if(maxVotes > 0){
+       return (
+           <div>
+               <h3>Anecdote With Most Votes</h3>
+               <p>{anecdotes[maxVotesIndex]}</p>
+               <p>Has {maxVotes} votes</p>
+           </div>
+       )
+   } else {
+       return (
+           <div>
+               <h3>Anecdotes have not been voted on. Please vote.</h3>
+           </div>
+       )
+   }
+}
 
 const Button = ({onClick, text}) => (
     <button onClick={onClick}>{text}</button>
@@ -10,21 +33,24 @@ const App = (props) => {
     const [votes, setVotes] = useState( new Array(anecdotes.length).fill(0) )
 
     const handleRandomClick = () => {
-       setSelected( Math.floor(Math.random() * anecdotes.length ) )
+       setSelected( Math.floor( Math.random() * anecdotes.length ) )
     }
 
     const handleVoteClick = () => {
        const voteCopy = [...votes]
+
        voteCopy[selected]++
        setVotes(voteCopy)
     }
 
     return (
         <div>
+            <h1>Anecdote of The Day</h1>
             <p>{props.anecdotes[selected]}</p>
             <p>Has {votes[selected]} votes</p>
             <Button onClick={handleVoteClick} text='Vote' />
             <Button onClick={handleRandomClick} text='Next Anecdote' />
+            <Voted votes={votes} anecdotes={props.anecdotes} />
         </div>
     )
 }

@@ -1,3 +1,5 @@
+// Fullstack 2019 - Alfonso Gutierrez
+// Part 1 - Courseinfo
 import React from 'react';
 import ReactDOM from 'react-dom';
 

@@ -33,6 +33,7 @@ const Content = ({course}) => {
     return (
         <div>
             {rows()}
+            <Total course = {course} />
         </div>
     )
 
@@ -46,9 +47,17 @@ const Part = ({part, exercises}) => {
     )
 }
 
+const Total = ({course}) => {
+    return (
+        <div>
+            <h3>Total of {course.parts[0].exercises + course.parts[1].exercises + course.parts[2].exercises + course.parts[3].exercises} exercises</h3>
+        </div>
+    )
+}
+
 const App = () => {
     const course = {
-        name: 'Half Stack application development',
+        name: 'Half Stack Application Development',
         parts: [
             {
                 name: 'Fundamentals of React',
@@ -66,6 +75,11 @@ const App = () => {
                 name: 'State of a component',
                 exercises: 14,
                 id: 3
+            },
+            {
+                name: 'Redux',
+                exercises: 11,
+                id: 4
             }
         ]
     }

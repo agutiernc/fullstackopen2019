@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import Numbers from './components/Numbers'
 
 const App = () => {
-    const [persons, setPersons] = useState([ {name: 'Arto Hellas', id: 1}])
+    const [persons, setPersons] = useState([ {name: 'Arto Hellas', id: 1} ])
     const [newName, setNewName] = useState('')
 
-    const rows = () => persons.map( (person, i) =>
+    const rows = () => persons.map( (person) =>
         <Numbers
             key={person.id}
             person={person}
@@ -15,18 +15,24 @@ const App = () => {
     const addName = (event) => {
         event.preventDefault()
 
-        const nameObject = {
-            name: newName,
-            id: persons.length + 1
-        }
+        const findDupliceName = persons.find( person => person.name.toLowerCase() === newName.toLowerCase() )
 
-        setPersons(persons.concat(nameObject))
-        setNewName('')
+        if (findDupliceName) {
+            alert(`${newName} is already added to phonebook`)
+            setNewName('')
+        } else {
+            const nameObject = {
+                name: newName,
+                id: persons.length + 1
+            }
+
+            setPersons(persons.concat(nameObject))
+            setNewName('')
+        }
     }
 
     const handleNameChange = (event) => {
         setNewName(event.target.value)
-        console.log(event.target.value)
     }
 
     return (

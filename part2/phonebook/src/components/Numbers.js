@@ -1,3 +1,6 @@
+// Fullstack Open 2019 - Part 2 - Phonebook
+// Alfonso Gutierrez
+
 import React from 'react'
 
 const Numbers = ({person}) => {

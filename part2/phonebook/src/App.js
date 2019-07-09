@@ -1,5 +1,10 @@
+// Fullstack Open 2019 - Part 2 - Phonebook
+// Alfonso Gutierrez
+
 import React, {useState} from 'react';
-import Numbers from './components/Numbers'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -17,13 +22,6 @@ const App = () => {
     const filterNames = persons.filter( person => person.name.toLowerCase().includes( findName.toLowerCase() ) )
 
     const personsToShow = showAll ? persons : filterNames
-
-    const rows = () => personsToShow.map( (person) =>
-        <Numbers
-            key={person.id}
-            person={person}
-        />    
-    )
 
     const addName = (event) => {
         event.preventDefault()
@@ -63,31 +61,21 @@ const App = () => {
         }
     }
 
-
     return (
         <div>
             <h2>Phonebook</h2>
 
-            <div>
-                <input value={findName} onChange={handleSearchChange} />
-            </div>
+            <Filter value={findName} onChange={handleSearchChange} />
+            <PersonForm 
+                onSubmit={addName} 
+                valueName={newName} 
+                valueNumber={newNumber} 
+                nameChange={handleNameChange} 
+                numberChange={handleNumberChange} 
+            />
 
-            <form onSubmit={addName}>
-                <div>
-                    Name: <input value={newName} onChange={handleNameChange} />
-                    <br />
-                    Number: <input value={newNumber} onChange={handleNumberChange} />
-                </div>
-
-                <div>
-                    <button type="submit">Add</button>
-                </div>
-            </form>
-
-            <h2>Numbers</h2>
-            <ul>
-                {rows()}
-            </ul>
+            <h3>Numbers</h3>
+            <Persons personsArr={personsToShow} />
         </div>
     )
 }

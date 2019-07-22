@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Display = ({country}) => {
-        return (
-            <p>{country.name}</p>
-        )
+const Display = ({ country }) => {
+    const [showCountry, setShowCountry] = useState(true)
+
+    const show = () => {
+        if(!showCountry){
+            return(
+                <div>
+                    <Country country={country} />
+                </div>
+            )
+        }
+    }
+
+    return (
+        <div>
+            {country.name} <button onClick={ () => setShowCountry(!showCountry) }>show</button>
+            {show()}
+        </div>
+    )
 }
 
 const Dialect = ({language}) => {
@@ -35,6 +50,7 @@ const Country = ({country}) => {
             <div>
                 <img src={country.flag} width="200" alt="Country's flag" />
             </div>
+            <br />
         </div>
     )
 }
@@ -68,7 +84,6 @@ const DisplayCountries = ({countries, filterCountry}) => {
                 {rows()}
             </>
         )
-        
     } else {
         return (
             <></>

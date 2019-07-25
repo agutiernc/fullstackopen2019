@@ -37,8 +37,8 @@ const App = () => {
             // creates new object, ready for JSON file
             const nameObject = {
                 name: newName,
-                number: newNumber,
-                id: persons.length + 1
+                number: newNumber
+                // id: persons.length + 1 // temporarily removed id to make insertions work
             }
 
             personService
@@ -48,7 +48,29 @@ const App = () => {
                     setNewName('')
                     setNewNumber('')
                 })
+        }
+    }
 
+    // deletes the person from the phonebook
+    const deleteEntryChange = id => {
+        const person = persons.find( p => p.id === id )
+        const deletedPerson = {...person}
+        
+        if(window.confirm(`Delete ${person.name}?`)){
+            console.log(`the id ${id}`)
+            console.log('the object:', person)
+            console.log(`the person id: ${person.id}`)
+            console.log('copy of person object', deletedPerson)
+            
+            personService
+                .destroy(id)
+                .then( returnedPerson => {
+                    setPersons( persons.filter( person => person.id !== id ) )
+                })
+                .catch( error => {
+                    alert(`'${person.name}' was already deleted from the server`)
+                    setPersons( persons.filter( person => person.id !== id ) )
+                })
         }
     }
 
@@ -70,9 +92,10 @@ const App = () => {
 
     return (
         <div>
-            <h2>Phonebook</h2>
+            <h1>Phonebook</h1>
 
             <Filter value={findName} onChange={handleSearchChange} />
+            <h3>Add A New Number</h3>
             <PersonForm 
                 onSubmit={addName} 
                 valueName={newName} 
@@ -82,7 +105,7 @@ const App = () => {
             />
 
             <h3>Numbers</h3>
-            <Persons personsArr={personsToShow} />
+            <Persons personsArr={personsToShow} deleteEntry={deleteEntryChange} />
         </div>
     )
 }

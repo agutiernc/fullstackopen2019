@@ -7,7 +7,7 @@ const Filter = ({value, onChange}) => {
 
     return (
         <div>
-            <input value={value} onChange={onChange} />
+           Filter names: <input value={value} onChange={onChange} />
         </div>
     )
 }

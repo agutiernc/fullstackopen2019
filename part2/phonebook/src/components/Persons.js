@@ -4,11 +4,12 @@
 import React from 'react'
 import Numbers from './Numbers'
 
-const Persons = ({personsArr}) => {
+const Persons = ({personsArr, deleteEntry}) => {
     const rows = () => personsArr.map((person) =>
         <Numbers
             key={person.id}
             person={person}
+            deleteEntry={ () => deleteEntry(person.id) }
         />
     )
 

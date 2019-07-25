@@ -3,9 +3,9 @@
 
 import React from 'react'
 
-const Numbers = ({person}) => {
+const Numbers = ({person, deleteEntry}) => {
     return (
-        <li>{person.name}: {person.number}</li>
+        <li>{person.name}: {person.number} <button onClick={deleteEntry}>delete</button></li>
     )
 }
 

@@ -30,15 +30,29 @@ const App = () => {
         const findDuplicateName = persons.find( person => person.name.toLowerCase() === newName.toLowerCase() )
 
         if (findDuplicateName) {
-            alert(`${newName} is already added to phonebook`)
-            setNewName('')
-            setNewNumber('')
+            // if duplicate name, ask if want to change number?
+            //      if yes, then update user id with new number
+            if( window.confirm(`${newName} is already added to phonebook. Replace old number with a new one?`) ){
+                const changedNumber = {...findDuplicateName, number: newNumber} // number is targeted and updates
+
+                personService
+                    .update(changedNumber.id, changedNumber)
+                    .then( returnedPerson => {
+                        setPersons( persons.map( person => person.id !== changedNumber.id ? person : returnedPerson ) )
+                        setNewName('')
+                        setNewNumber('')
+                    })
+                    .catch( error => {
+                        alert(`'${changedNumber.name}' was already deleted from the server`)
+                        setPersons( persons.filter( person => person.id !== changedNumber.id ) )
+                    })
+            }
+           
         } else {
-            // creates new object, ready for JSON file
+            // creates new object; ready for JSON file
             const nameObject = {
                 name: newName,
                 number: newNumber
-                // id: persons.length + 1 // temporarily removed id to make insertions work
             }
 
             personService
@@ -51,22 +65,18 @@ const App = () => {
         }
     }
 
-    // deletes the person from the phonebook
+    // deletes the person from the phonebook if button triggered
     const deleteEntryChange = id => {
         const person = persons.find( p => p.id === id )
-        const deletedPerson = {...person}
         
         if(window.confirm(`Delete ${person.name}?`)){
-            console.log(`the id ${id}`)
-            console.log('the object:', person)
-            console.log(`the person id: ${person.id}`)
-            console.log('copy of person object', deletedPerson)
             
             personService
                 .destroy(id)
-                .then( returnedPerson => {
-                    setPersons( persons.filter( person => person.id !== id ) )
-                })
+                .then( setPersons( persons.filter( person => person.id !== id ) ) )
+                // .then( returnedPerson => {
+                //     setPersons( persons.filter( person => person.id !== id ) )
+                // })
                 .catch( error => {
                     alert(`'${person.name}' was already deleted from the server`)
                     setPersons( persons.filter( person => person.id !== id ) )

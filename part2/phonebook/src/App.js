@@ -14,7 +14,7 @@ const App = () => {
     const [newNumber, setNewNumber] = useState('')
     const [findName, setFindName] = useState('')
     const [showAll, setShowAll] = useState(true)
-    const [message, setMessage] = useState(null)
+    const [message, setMessage] = useState({text: null, type: null})
 
     useEffect( () => {
         personService
@@ -37,21 +37,33 @@ const App = () => {
             if( window.confirm(`${newName} is already added to phonebook. Replace old number with a new one?`) ){
                 const changedNumber = {...findDuplicateName, number: newNumber} // number is targeted and updates
 
+                // updates existing person
                 personService
                     .update(changedNumber.id, changedNumber)
                     .then( returnedPerson => {
                         setPersons( persons.map( person => person.id !== changedNumber.id ? person : returnedPerson ) )
-                        setMessage(`Updated ${changedNumber.name}'s number`)
+                        setMessage({text: `Updated ${changedNumber.name}'s number`, type: 'success' })
                         setTimeout( () => {
-                            setMessage(null)
+                            setMessage({text: null, type: null})
                         }, 5000)
                         setNewName('')
                         setNewNumber('')
                     })
-                    .catch( error => {
-                        alert(`'${changedNumber.name}' was already deleted from the server`)
-                        setPersons( persons.filter( person => person.id !== changedNumber.id ) )
+                    .catch(error => {
+                        setMessage({
+                            text: `Information of ${changedNumber.name} has already been removed from server`,
+                            type: 'error'
+                        })
+                        setTimeout(() => {
+                            setMessage({ text: null, type: null })
+                        }, 5000)
+                        setPersons(persons.filter(person => person.id !== changedNumber.id))
+                        setNewName('')
+                        setNewNumber('')
                     })
+            } else {
+                setNewName('')
+                setNewNumber('')
             }
            
         } else {
@@ -65,9 +77,9 @@ const App = () => {
                 .create(nameObject)
                 .then( returnedPerson => {
                     setPersons( persons.concat(returnedPerson) )
-                    setMessage(`Added ${returnedPerson.name}`)
+                    setMessage({text: `Added ${returnedPerson.name}`, type: 'success'})
                     setTimeout( () => {
-                        setMessage(null)
+                        setMessage({text: null, type: null})
                     }, 5000)
                     setNewName('')
                     setNewNumber('')
@@ -84,15 +96,20 @@ const App = () => {
             personService
                 .destroy(id)
                 .then( () => {
-                    setPersons( persons.filter( person => person.id !== id ) ) 
-                    setMessage(`Deleted ${person.name}`)
+                    setPersons( persons.filter( person => person.id !== id ) )
+                    setMessage({text: `Deleted ${person.name}`, type:'success'})
                     setTimeout( () => {
-                        setMessage(null)
+                        setMessage({text: null, type: null})
                     }, 5000)
                 })
                 .catch( error => {
-                    alert(`'${person.name}' was already deleted from the server`)
+                    setMessage({text: `'${person.name}' was already deleted from the server`, type: 'error' })
+                    setTimeout( () => {
+                        setMessage({text: null, type: null})
+                    }, 5000)
                     setPersons( persons.filter( person => person.id !== id ) )
+                    setNewName('')
+                    setNewNumber('')
                 })
         }
     }

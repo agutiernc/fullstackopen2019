@@ -1,13 +1,33 @@
+// Fullstack Open 2019 - Part 2 - Phonebook
+// Alfonso Gutierrez
+
 import React from 'react'
 
 const Notification = ({message}) => {
-    if(message === null) {
+    let mainMsgStyle = null
+
+    const msgStyle = {
+        background: 'lightgrey',
+        fontSize: 20,
+        borderStyle: 'solid',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10
+    }
+    if(message.text === null) {
         return null
     }
 
+    if(message.type === 'success') {
+        mainMsgStyle = {...msgStyle, color: 'green'}
+    } else {
+        mainMsgStyle = {...msgStyle, color: 'red'}
+    }
+
+
     return (
-        <div className="success">
-            {message}
+        <div style={mainMsgStyle}>
+            {message.text}
         </div>
     )
 }

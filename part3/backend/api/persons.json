@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Arto Hellas",
+        "number": "233-355-2398",
+        "id": 1
+    },
+    {
+        "name": "Ada Lovelace",
+        "number": "312-891-8371",
+        "id": 2
+    },
+    {
+        "name": "Dan Abramov",
+        "number": "330-882-8776",
+        "id": 3
+    },
+    {
+        "name": "Peter Parker",
+        "number": "212-983-8782",
+        "id": 4
+    }
+]

@@ -1,0 +1,54 @@
+{
+  "persons": [
+    {
+      "name": "Arto Hellas",
+      "number": "040-123456",
+      "id": 1
+    },
+    {
+      "name": "Dan Abramov",
+      "number": "12-43-234345",
+      "id": 2
+    },
+    {
+      "name": "Harley Quinn",
+      "number": "626-666-6666",
+      "id": 4
+    },
+    {
+      "name": "Dr Doom",
+      "number": "111-212-4432",
+      "id": 7
+    },
+    {
+      "name": "The JoKeR",
+      "number": "556-323-6577",
+      "id": 8
+    },
+    {
+      "name": "Bruce Wayne",
+      "number": "324-345-6490",
+      "id": 10
+    },
+    {
+      "name": "Wonder Woman",
+      "number": "325-659-9892",
+      "id": 12
+    },
+    {
+      "name": "Swamp Thing",
+      "number": "323-345-2802",
+      "id": 13
+    },
+    {
+      "name": "Clark Kent",
+      "number": "212-423-8940",
+      "id": 14
+    },
+    {
+      "name": "Silver Surfer",
+      "number": "342-424-9313",
+      "id": 15
+    }
+  ]
+}

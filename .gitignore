@@ -1,5 +1,5 @@
 .DS_Store
 *.txt
 
-part4/.gitignore
-part4/blog-backend/package-lock.json
+/part5/notes-backend
+/part5/notes-frontend

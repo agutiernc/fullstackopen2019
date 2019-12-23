@@ -3,7 +3,6 @@ import blogUsersService from '../services/users'
 const blogUsersReducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT_BLOGGERS':
-      console.log('action from blogUsersReducer:', action.data)
       return action.data
     default:
       return state

@@ -33,10 +33,9 @@ export const addComment = (blog, content) => {
 }
 
 export const likeBlog = (blog) => {
-
   return async dispatch => {
     const updatedBlog = await blogService.update({ ...blog, likes: blog.likes + 1 })
-    console.log('from like: ', blog)
+    
     dispatch({
       type: 'LIKE',
       data: updatedBlog
@@ -81,7 +80,6 @@ const blogReducer = (state = [], action) => {
 }
 
 export const initializeBlogs = () => {
-  
   return async dispatch => {
     const blogs = await blogService.getAll()
 

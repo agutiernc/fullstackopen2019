@@ -18,7 +18,6 @@ const UserInfo = (props) => {
     }, 7)
   }
 
-  console.log('user info user: ', props.user.blogs.length )
   return (
     <div>
       <h2>{props.user.name}</h2>

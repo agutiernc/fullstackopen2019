@@ -56,7 +56,6 @@ const Blog = (props) => {
     }
   }
 
-  // Shows like button to user that didn't add blog
   const showLikeBtn = () => {
     if ( props.blog.user.name !== props.user.name ) {
       return (

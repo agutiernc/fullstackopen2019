@@ -20,18 +20,27 @@ const BlogForm = (props) => {
   const blogFormRef = React.createRef()
 
   const addBlog = async (event) => {
-    try {
-      event.preventDefault()
+    event.preventDefault()
 
-      blogFormRef.current.toggleVisibility()
+    blogFormRef.current.toggleVisibility()
 
-      const blogObject = {
-        title: title.value,
-        author: author.value,
-        url: url.value
-      }
+    const blogObject = {
+      title: title.value,
+      author: author.value,
+      url: url.value
+    }
 
+    if (blogObject.title === '' || blogObject.author === '' || blogObject === '') {
+      props.setNotification({
+        text: `Please fill all fields`,
+        type: 'error'
+      }, 7)
+    } else {
       props.createBlog(blogObject)
+
+      title.reset.reset()
+      author.reset.reset()
+      url.reset.reset()
 
       props.setNotification({
         text: `A new blog ${blogObject.title} by ${blogObject.author} added`,
@@ -39,15 +48,6 @@ const BlogForm = (props) => {
       }, 7)
 
       props.history.push('/')
-      title.reset.reset()
-      author.reset.reset()
-      url.reset.reset()
-    } catch (exception) {
-
-      props.setNotification({
-        text: 'Error: Please fill all fields',
-        type: 'error'
-      }, 7)
     }
   }
 

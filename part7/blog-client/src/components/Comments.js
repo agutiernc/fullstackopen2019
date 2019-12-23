@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { useField } from '../hooks'
 import { addComment } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 import { List, Input, Form, Button } from 'semantic-ui-react'
 
 const Comments = (props) => {
@@ -23,9 +24,21 @@ const Comments = (props) => {
 
     const content = comment.value
 
-    props.addComment(props.blog, content)
-    comment.reset.reset()
-    props.history.push(`/blogs/${props.blog.id}`)
+    if (content === '') {
+      props.setNotification({
+        text: 'Comment is too short or must be filled',
+        type: 'error'
+      }, 7)
+    } else {
+      props.addComment(props.blog, content)
+      props.setNotification({
+        text: 'Thanks for commenting',
+        type: 'success'
+      }, 7)
+      comment.reset.reset()
+
+      props.history.push(`/blogs/${props.blog.id}`)
+    }
   }
 
   return (
@@ -62,7 +75,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 const mapDispatchToProps = {
-  addComment
+  addComment,
+  setNotification
 }
 
 

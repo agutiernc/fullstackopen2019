@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const config = (env, argv) => {
 
   const backend_url = argv.mode === 'production'
-    ? 'https://radiant-plateau-25399.herokuapp.com/api/notes'
+    ? 'http://localhost:3003'
     : 'http://localhost:3003'
 
   return {
@@ -14,11 +14,13 @@ const config = (env, argv) => {
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: 'main.js',
+      publicPath: '/'
     },
     devServer: {
       contentBase: path.resolve(__dirname, 'build'),
       compress: true,
       port: 3000,
+      historyApiFallback: true,
       proxy: {
         '/api': backend_url
       }

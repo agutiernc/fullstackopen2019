@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = `${BACKEND_URL}/api/blogs`
+const baseUrl = '/api/blogs'
 
 let token = null
 
@@ -43,8 +43,6 @@ const destroy = async id => {
 }
 
 const createComment = async (id, comment) => {
-  console.log('from createComment', id)
-  console.log('from createComment', comment)
   const config = {
     headers: { Authorization: token }
   }

@@ -1,0 +1,152 @@
+// Handles the event handlers of blog routes
+const blogsRouter = require('express').Router()
+const Blog = require('../models/blog')
+const User = require('../models/user')
+const Comments = require('../models/comments')
+const jwt = require('jsonwebtoken')
+
+// Route 1 - gets all blogs in MongoDB
+blogsRouter.get('/', async (request, response) => {
+    const blogs = await Blog.find({})
+        .populate('user', { username: 1, name: 1})
+        .populate('comments', { message: 1 })
+
+    response.json( blogs.map( blog => blog.toJSON() ) )
+})
+
+// Route 2 - gets an object id
+blogsRouter.get('/:id', (request, response, next) => {
+
+    Blog
+        .findById(request.params.id)
+        .then(blog => {
+            blog ? response.json( blog.toJSON() ) : response.status(404).end()
+        })
+        .catch(error => next(error))
+})
+
+// Route 3 - POST blog
+blogsRouter.post('/', async (request, response, next) => {
+    const body = request.body
+    
+    try {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+        if (!request.token || !decodedToken.id ) {
+            return response.status(401).json( {error: 'token missing or invalid'} )
+        }
+
+        if (!body.title || !body.author || !body.url) {
+            return response.status(400).json({ error: 'title, author, or likes is missing' })
+        }
+
+        // user that creates the blog
+        const user = await User.findById( decodedToken.id )
+
+        const blog = new Blog({
+            title: body.title,
+            author: body.author,
+            url: body.url,
+            likes: body.likes || 0,
+            user: user._id
+        })
+
+
+        const savedBlog = await blog.save()
+
+        // new blog is assigned to user that created it
+        user.blogs = user.blogs.concat(savedBlog._id)
+        await user.save()
+
+        response.json( savedBlog.toJSON() )
+    } catch (exception) {
+        next(exception)
+    }
+})
+
+//route 4 - Delete an id
+blogsRouter.delete('/:id', async (request, response, next) => {
+    try {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        
+        if (!request.token || !decodedToken.id) {
+            return response.status(401).json( { error: 'token missing or invalid' } )
+        }
+
+        // user that wants to delete the blog
+        const user = await User.findById( decodedToken.id )
+
+        // blog to delete
+        const blog = await Blog.findById( request.params.id )
+        
+        if ( blog.user.toString() !== user.id.toString() ) {
+            return response.status(403).json( {error: 'Unauthorized: Blog belongs to another user'} )
+        }
+
+        await Blog.findByIdAndRemove( request.params.id )
+
+        response.status(204).end()
+    } catch (exception) {
+        next(exception)
+    }
+})
+
+// route 5 - PUT - Fetches and updates a blog
+blogsRouter.put('/:id', async (request, response, next) => {
+    try {
+        const blogToUpdate = await Blog.findById(request.params.id)
+
+        const updateLike = {
+            likes: blogToUpdate.likes + 1
+        }
+
+        const updatedBlog = await Blog.findByIdAndUpdate( request.params.id, updateLike, { new: true } )
+
+        response.json( updatedBlog.toJSON() )
+    } catch (exception) {
+        next(exception)
+    }
+})
+
+// route 6 - GET - Fetches blog's comments
+blogsRouter.get('/:id/comments', async (request, response, next) => {
+    try {
+        const blog = await Blog.findById(request.params.id).populate('comments', { message: 1 })
+
+        response.json(blog.comments)
+    } catch (exception) {
+        next(exception)
+    }
+})
+
+// route 7 - POST - Post blog comment
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+    const body = request.body
+
+    try {
+        const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+        if (!request.token || !decodedToken.id ) {
+            return response.status(401).json( {error: 'token missing or invalid'} )
+        }
+
+        const blog = await Blog.findById(request.params.id)
+
+        const comment = new Comments({
+            message: body.message
+        })
+
+        const savedComment = await comment.save()
+
+        blog.comments = blog.comments.concat(savedComment)
+
+        await blog.save()
+
+        response.json( savedComment.toJSON() )
+
+    } catch (exception) {
+        next(exception)
+    }
+})
+
+module.exports = blogsRouter
